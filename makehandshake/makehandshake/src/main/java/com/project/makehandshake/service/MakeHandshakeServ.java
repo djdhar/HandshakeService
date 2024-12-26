@@ -9,11 +9,16 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class MakeHandshakeServ {
+    KafkaPublisherService kafkaPublisherService;
+    public MakeHandshakeServ(KafkaPublisherService kafkaPublisherService) {
+        this.kafkaPublisherService = kafkaPublisherService;
+    }
     public Mono<HandShakeResponse> makeHandshakeService(HandShake handShake) {
         if(StringUtil.isNullOrEmpty(handShake.getName()) || StringUtil.isNullOrEmpty(handShake.getEmail())) {
             return Mono.error(new HandShakeErrorResponse("Handshake request error: " + handShake));
         } else {
-            return Mono.just(new HandShakeResponse(handShake + "request triggered!"));
+            return kafkaPublisherService.sendMessage("djdhar", handShake)
+                    .then(Mono.just(new HandShakeResponse(handShake + "request triggered!")));
         }
     }
 }
