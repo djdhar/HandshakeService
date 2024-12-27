@@ -13,3 +13,30 @@ docker ps
 ```
 docker exec -it <kafka-container-id> /opt/kafka/bin/kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic djdhar
 ```
+
+### SMTP Server Settings
+
+#### Step 1
+Change `application.properties`
+Modify them with your service gmail address and app password
+```
+spring.mail.username=YOUR_GMAIL
+spring.mail.password=YOUR_PASSWORD
+```
+
+#### Step 2
+In `EmailService.java`
+Set your service gmail address from which the notification mail will be sent
+```
+    public void sendEmail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        message.setFrom(YOUR_GMAIL); // Your email address
+
+        mailSender.send(message);
+    }
+```
+#### Step 2
+Run the SpringBoot app

@@ -12,10 +12,15 @@ import reactor.core.publisher.Mono;
 public class MakeHandshakeServ {
     KafkaPublisherService kafkaPublisherService;
     KafkaConsumerService kafkaConsumerService;
+    EmailService emailService;
+    private static final String HANDSHAKE_SUBJECT = "Hi! You got a new handshake.";
 
-    public MakeHandshakeServ(KafkaPublisherService kafkaPublisherService, KafkaConsumerService kafkaConsumerService) {
+    public MakeHandshakeServ(KafkaPublisherService kafkaPublisherService,
+                             KafkaConsumerService kafkaConsumerService,
+                             EmailService emailService) {
         this.kafkaPublisherService = kafkaPublisherService;
         this.kafkaConsumerService = kafkaConsumerService;
+        this.emailService = emailService;
     }
     public Mono<HandShakeResponse> makeHandshakeService(HandShake handShake) {
         if(StringUtil.isNullOrEmpty(handShake.getName()) || StringUtil.isNullOrEmpty(handShake.getEmail())) {
@@ -29,9 +34,22 @@ public class MakeHandshakeServ {
     public Flux<String> streamHandshakeMessages() {
         return kafkaConsumerService.getMessageStream()
                 .buffer(2)// Group elements into lists of size 2
-                .flatMap(duo ->
-                        HandShake.isValidHandShake(duo.get(0)) && HandShake.isValidHandShake(duo.get(1)) ?
-                                Flux.just(duo.get(0) + " handshaked with " + duo.get(1)) : Flux.empty()
+                .flatMap(duo -> {
+                            if(HandShake.isValidHandShake(duo.get(0)) && HandShake.isValidHandShake(duo.get(1))) {
+                                try {
+                                    String handShakeMail = duo.get(0).getName() + " handshaked with " + duo.get(1).getName();
+                                    System.out.println(handShakeMail);
+                                    emailService.sendEmail(duo.get(0).getEmail(), HANDSHAKE_SUBJECT, handShakeMail);
+                                    emailService.sendEmail(duo.get(1).getEmail(), HANDSHAKE_SUBJECT, handShakeMail);
+                                    return Flux.just(handShakeMail);
+                                } catch (Exception e) {
+                                    System.out.println(e.getMessage());
+                                    return Flux.empty();
+                                }
+                            } else {
+                                return Flux.empty();
+                             }
+                        }
                 );
     }
 }
