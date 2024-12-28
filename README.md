@@ -23,20 +23,5 @@ Modify them with your service gmail address and app password
 spring.mail.username=YOUR_GMAIL
 spring.mail.password=YOUR_PASSWORD
 ```
-
-#### Step 2
-In `EmailService.java`
-Set your service gmail address from which the notification mail will be sent
-```
-    public void sendEmail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        message.setFrom(YOUR_GMAIL); // Your email address
-
-        mailSender.send(message);
-    }
-```
 #### Step 2
 Run the SpringBoot app

@@ -27,8 +27,13 @@ public class MakeHandshakeController {
         return makeHandshakeServ.makeHandshakeService(handShake);
     }
 
-    @GetMapping(value = "/v1/stream_handshake", produces = "text/event-stream")
-    public Flux<String> streamHandshakeMessages() {
+    @GetMapping(value = "/v1/stream_admin_handshake", produces = "text/event-stream")
+    public Flux<String> streamAdminHandshakeMessages() {
         return makeHandshakeServ.streamHandshakeMessages();
+    }
+
+    @GetMapping(value = "/v1/stream_live_handshake", produces = "text/event-stream")
+    public Flux<String> streamLiveHandshakeMessages() {
+        return makeHandshakeServ.streamLiveHandshakeMessages();
     }
 }

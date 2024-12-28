@@ -13,7 +13,6 @@ public class MakeHandshakeServ {
     KafkaPublisherService kafkaPublisherService;
     KafkaConsumerService kafkaConsumerService;
     EmailService emailService;
-    private static final String HANDSHAKE_SUBJECT = "Hi! You got a new handshake.";
 
     public MakeHandshakeServ(KafkaPublisherService kafkaPublisherService,
                              KafkaConsumerService kafkaConsumerService,
@@ -32,15 +31,12 @@ public class MakeHandshakeServ {
     }
 
     public Flux<String> streamHandshakeMessages() {
-        return kafkaConsumerService.getMessageStream()
-                .buffer(2)// Group elements into lists of size 2
+        return kafkaConsumerService.getAdminUnreadMessageStream()
                 .flatMap(duo -> {
-                            if(HandShake.isValidHandShake(duo.get(0)) && HandShake.isValidHandShake(duo.get(1))) {
+                            if(duo.size()==2 && HandShake.isValidHandShake(duo.get(0)) && HandShake.isValidHandShake(duo.get(1))) {
                                 try {
                                     String handShakeMail = duo.get(0).getName() + " handshaked with " + duo.get(1).getName();
                                     System.out.println(handShakeMail);
-                                    emailService.sendEmail(duo.get(0).getEmail(), HANDSHAKE_SUBJECT, handShakeMail);
-                                    emailService.sendEmail(duo.get(1).getEmail(), HANDSHAKE_SUBJECT, handShakeMail);
                                     return Flux.just(handShakeMail);
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
@@ -51,5 +47,27 @@ public class MakeHandshakeServ {
                              }
                         }
                 );
+    }
+
+    public Flux<String> streamLiveHandshakeMessages() {
+        return kafkaConsumerService.getLiveMessageStream()
+                .flatMap(duo -> {
+                            if(duo.size()==2 && HandShake.isValidHandShake(duo.get(0)) && HandShake.isValidHandShake(duo.get(1))) {
+                                try {
+                                    String handShakeMail = duo.get(0).getName() + " handshaked with " + duo.get(1).getName();
+                                    System.out.println(handShakeMail);
+                                    return Flux.just(handShakeMail);
+                                } catch (Exception e) {
+                                    System.out.println(e.getMessage());
+                                    return Flux.empty();
+                                }
+                            } else {
+                                return Flux.empty();
+                            }
+                        }
+                ).onErrorResume(e -> {
+                    System.err.println("Stream error: " + e.getMessage());
+                    return Flux.never(); // Keep the connection alive on errors
+                });
     }
 }
