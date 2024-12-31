@@ -1,19 +1,9 @@
-### Create Kafka Server
-https://medium.com/@amberkakkar01/getting-started-with-apache-kafka-on-docker-a-step-by-step-guide-48e71e241cf2
-
-#### Step 1
+## One Click Run the Application
 ```
 docker-compose up -d
 ```
-#### Step 2
-```
-docker ps
-```
-#### Step 3
-```
-docker exec -it <kafka-container-id> /opt/kafka/bin/kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic djdhar
-```
 
+## To Custom run your application
 ### SMTP Server Settings
 
 #### Step 1
@@ -24,4 +14,14 @@ spring.mail.username=YOUR_GMAIL
 spring.mail.password=YOUR_PASSWORD
 ```
 #### Step 2
-Run the SpringBoot app
+Build the Spring Boot App with Java 17+
+```
+cd makehandshake/makehandshake
+mvn clean compile install -DskipTests
+```
+#### Step 3
+```
+cd ..
+cd ..
+docker-compose -f my-docker-compose.yml up
+```

@@ -23,7 +23,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   makehandshakeapp:
-    image: djdhar/makehandshake:latest
+    build: ./makehandshake/makehandshake
     environment:
       SPRING_KAFKA_BOOTSTRAP-SERVERS: kafka:9093
     ports:
