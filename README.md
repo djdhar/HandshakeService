@@ -30,3 +30,6 @@ docker-compose -f my-docker-compose.yml up
 ```
 & "C:\Program Files\Google\Chrome\Application\chrome.exe" --disable-web-security --user-data-dir="C:\chrome_dev"
 ```
+
+## Design & Sequence Diagram
+![seq_dgm.png](seq_dgm.png)
