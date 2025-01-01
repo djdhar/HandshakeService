@@ -1,4 +1,8 @@
 ## One Click Run the Application
+Docker image of the SpringBoot application is deployed in [Dockerhub](https://hub.docker.com/repository/docker/djdhar/makehandshake/general).
+
+We can use this image to start the application.
+To start the application along with kafka & zookeeper with all the required settings & topic pre-generated.
 ```
 docker-compose up -d
 ```
