@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handshake Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px -10px;
+
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #message {
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .stream-section {
+            margin-top: 40px;
+        }
+
+        .stream-section div {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #chatWindow, #chatWindowLive {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #chatWindow div, #chatWindowLive div {
+            padding: 5px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+        }
+
+        #chatWindow div:last-child, #chatWindowLive div:last-child {
+            border-bottom: none;
+        }
+
+        .disabled {
+            background-color: #e0e0e0;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Send a Handshake Request</h1>
+<form id="handshakeForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    <br><br>
+    <label for="email">Email Address:</label>
+    <input type="email" id="email" name="email" required>
+    <br><br>
+    <button type="submit">Send Handshake</button>
+</form>
+
+<p id="message" style="display: none;"></p>
+
+<div class="stream-section">
+    <h1>Stream Admin Events</h1>
+    <div>
+        <button id="startStream">Start Stream</button>
+        <button id="stopStream" disabled>Stop Stream</button>
+    </div>
+
+    <!-- Chat Window -->
+    <div id="chatWindow"></div>
+</div>
+
+<div class="stream-section">
+    <h1>Stream Live Events</h1>
+    <div>
+        <button id="startStreamLive">Start Stream</button>
+        <button id="stopStreamLive" disabled>Stop Stream</button>
+    </div>
+
+    <div id="chatWindowLive"></div>
+</div>
+
+<script src="handshake.js"></script>
+</body>
+</html>
