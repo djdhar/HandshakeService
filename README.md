@@ -4,9 +4,8 @@ docker-compose up -d
 ```
 
 ## To Custom run your application
-### SMTP Server Settings
 
-#### Step 1
+#### Step 1 (SMTP Server Settings)
 Change `application.properties`
 Modify them with your service gmail address and app password
 ```
@@ -24,4 +23,10 @@ mvn clean compile install -DskipTests
 cd ..
 cd ..
 docker-compose -f my-docker-compose.yml up
+```
+
+## Run Frontend
+
+```
+& "C:\Program Files\Google\Chrome\Application\chrome.exe" --disable-web-security --user-data-dir="C:\chrome_dev"
 ```
